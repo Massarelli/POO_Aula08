@@ -47,6 +47,27 @@ namespace POO_Aula08.Classes
             set { anoLancamento = value; }
         }
 
+        
+// Nova propriedade: Uma lista para guardar todas as notas recebidas
+        public List<double> Avaliacoes { get; private set; } = new List<double>();
+
+        // Propriedade calculada: Retorna a média de todas as notas usando LINQ
+        // Se não houver avaliações, retorna 0.
+        public double MediaAvaliacoes => Avaliacoes.Any() ? Avaliacoes.Average() : 0;
+
+        // Método para adicionar uma nova nota com validação
+        public void AdicionarAvaliacao(double nota)
+        {
+            if (nota >= 0 && nota <= 10)
+            {
+                Avaliacoes.Add(nota);
+            }
+            else
+            {
+                Console.WriteLine("A nota deve estar entre 0 e 10.");
+            }
+        }        
+        
         // [POLIMORFISMO / ABSTRAÇÃO]: Método abstrato (sem corpo).
         // Isso obriga que toda classe que herdar de 'Conteudo' implemente obrigatoriamente a sua própria versão deste método.
         public abstract void ExibirInformacoes();

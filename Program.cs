@@ -25,7 +25,9 @@ namespace POO_Aula08
                 Console.WriteLine("3 - Buscar conteúdo por título");
                 Console.WriteLine("4 - Exibir detalhes de um conteúdo");
                 Console.WriteLine("5 - Remover conteúdo");
-                Console.WriteLine("6 - Sair");
+                Console.WriteLine("6 - Avaliar um conteúdo"); // DESAFIOS EXTRA: Implementar sistema de avaliação (notas) para cada conteúdo
+                Console.WriteLine("7 - Ver Ranking (Top Avaliados)"); // DESAFIOS EXTRA: Criar um ranking dos conteúdos mais bem avaliados, mostrando título e média das avaliações
+                Console.WriteLine("8 - Sair");
                 Console.WriteLine("===================================");
                 Console.Write("Escolha uma opção: ");
                 
@@ -49,6 +51,12 @@ namespace POO_Aula08
                         RemoverConteudo();
                         break;
                     case "6":
+                        AvaliarConteudo();
+                        break;
+                    case "7":
+                        ExibirRanking();
+                        break;
+                    case "8":
                         executando = false;
                         Console.WriteLine("Saindo do sistema...");
                         break;
@@ -380,5 +388,82 @@ namespace POO_Aula08
             Console.WriteLine("\nPressione qualquer tecla para voltar...");
             Console.ReadKey();
         }
+        static void AvaliarConteudo()
+        {
+            Console.Clear();
+            Console.WriteLine("===== AVALIAR CONTEÚDO =====");
+
+            if (!MostrarListaSimples()) 
+            {
+                Console.WriteLine("\nPressione qualquer tecla para voltar...");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.Write("Digite o ID do conteúdo que deseja avaliar: ");
+            
+            if(int.TryParse(Console.ReadLine(), out int idAvaliar))
+            {
+                Conteudo? encontrado = catalogo.FirstOrDefault(c => c.Id == idAvaliar);
+
+                if (encontrado != null)
+                {
+                    Console.Write($"Digite a nota para '{encontrado.Titulo}' (0 a 10): ");
+                    
+                    // Usamos double.TryParse para aceitar números quebrados (ex: 8.5)
+                    if (double.TryParse(Console.ReadLine(), out double nota) && nota >= 0 && nota <= 10)
+                    {
+                        encontrado.AdicionarAvaliacao(nota);
+                        Console.WriteLine($"\nNota {nota} registrada com sucesso para '{encontrado.Titulo}'!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nErro: A nota deve ser um número válido entre 0 e 10.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("\nConteúdo não encontrado.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("\nID inválido. Digite um número.");
+            }
+            
+            Console.WriteLine("\nPressione qualquer tecla para voltar...");
+            Console.ReadKey();
+        }
+
+        static void ExibirRanking()
+        {
+            Console.Clear();
+            Console.WriteLine("===== RANKING DOS MELHORES CONTEÚDOS =====");
+
+            // Filtramos apenas os que têm alguma avaliação (Média > 0) 
+            // e ordenamos do maior para o menor (OrderByDescending)
+            var ranking = catalogo.Where(c => c.MediaAvaliacoes > 0)
+                                  .OrderByDescending(c => c.MediaAvaliacoes)
+                                  .ToList();
+
+            if (ranking.Count == 0)
+            {
+                Console.WriteLine("Ainda não há conteúdos avaliados para montar o ranking.");
+            }
+            else
+            {
+                int posicao = 1;
+                foreach (Conteudo c in ranking)
+                {
+                    // :F1 formata a nota para 1 casa decimal. Ex: 9.5
+                    Console.WriteLine($"{posicao}º Lugar | Nota: {c.MediaAvaliacoes:F1} ★ | {c.Titulo} ({c.GetType().Name})");
+                    posicao++;
+                }
+            }
+
+            Console.WriteLine("\nPressione qualquer tecla para voltar...");
+            Console.ReadKey();
+        }
+
     }
 }
