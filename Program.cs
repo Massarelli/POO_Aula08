@@ -8,14 +8,12 @@ namespace POO_Aula08
         // Graças a isso, a mesma lista tem a capacidade de armazenar Filmes, Séries e Podcasts juntos!
         static List<Conteudo> catalogo = new List<Conteudo>();
 
-        // [CARGA INICIAL]: Método que coloca dados de teste automaticamente.
-        // Para DESATIVAR a carga automática, basta colocar duas barras (//) na linha abaixo:
-        //CargaInicialDados(); 
-
-        // ... aqui continua o seu laço 'while (executando)' do menu ...
-
         static void Main(string[] args)
         {
+            // [CARGA INICIAL]: Método que coloca dados de teste automaticamente.
+            // Para DESATIVAR a carga automática, basta colocar duas barras (//) no início da linha abaixo:
+            CargaInicialDados(); 
+
             bool executando = true;
 
             while (executando)
@@ -61,7 +59,21 @@ namespace POO_Aula08
                 }
             }
         }
-        // aqui temos a classe para a logica de cadastro, listagem, busca, exibição e remoção de conteúdos.
+
+        // ==========================================
+        // MÉTODOS DE AÇÃO DO SISTEMA
+        // ==========================================
+
+        static void CargaInicialDados()
+        {
+            catalogo.Add(new Filme(1, "Interestelar", "Ficção Científica", 2014, 169));
+            catalogo.Add(new Filme(2, "Matrix", "Ficção Científica", 1999, 136));
+            catalogo.Add(new Serie(3, "Dark", "Mistério", 2017, 3, 10));
+            catalogo.Add(new Serie(4, "Breaking Bad", "Drama", 2008, 5, 13));
+            catalogo.Add(new Podcast(5, "Hipsters Ponto Tech", "Tecnologia", 2024, "Paulo Silveira", 200));
+            catalogo.Add(new Podcast(6, "Podpah", "Entretenimento", 2023, "Igão e Mítico", 450));
+        }
+
         static void CadastrarConteudo()
         {
             Console.Clear();
@@ -81,7 +93,6 @@ namespace POO_Aula08
             }
 
             Console.WriteLine("\n--- Dados Gerais ---");
-
 
             // 1. VALIDAÇÃO: ID Duplicado
             int id = 0;
