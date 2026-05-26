@@ -1,0 +1,295 @@
+using POO_Aula08.Classes;
+
+// 1. DECLARAÇÃO DA LISTA
+List<Conteudo> catalogo = new List<Conteudo>();
+
+// 2. CARGA INICIAL (Para desativar, basta comentar a linha abaixo)
+CargaInicialDados();
+
+// 3. FLUXO PRINCIPAL DO PROGRAMA (MENU)
+bool executando = true;
+
+while (executando)
+{
+    Console.Clear();
+    Console.WriteLine("===== PLATAFORMA DE STREAMING =====");
+    Console.WriteLine("1 - Cadastrar conteúdo");
+    Console.WriteLine("2 - Listar conteúdos");
+    Console.WriteLine("3 - Buscar conteúdo por título");
+    Console.WriteLine("4 - Exibir detalhes de um conteúdo");
+    Console.WriteLine("5 - Remover conteúdo");
+    Console.WriteLine("6 - Sair");
+    Console.WriteLine("===================================");
+    Console.Write("Escolha uma opção: ");
+    
+    string opcao = Console.ReadLine() ?? "";
+
+    switch (opcao)
+    {
+        case "1": CadastrarConteudo(); break;
+        case "2": ListarConteudos(); break;
+        case "3": BuscarPorTitulo(); break;
+        case "4": ExibirDetalhes(); break;
+        case "5": RemoverConteudo(); break;
+        case "6":
+            executando = false;
+            Console.WriteLine("Saindo do sistema...");
+            break;
+        default:
+            Console.WriteLine("Opção inválida! Tente novamente.");
+            Console.ReadKey();
+            break;
+    }
+}
+
+// ====================================================================
+// 4. MÉTODOS (Agora são Funções Locais, ficam no final do arquivo)
+// ====================================================================
+
+void CargaInicialDados()
+{
+    catalogo.Add(new Filme(1, "Interestelar", "Ficção Científica", 2014, 169));
+    catalogo.Add(new Filme(2, "Matrix", "Ficção Científica", 1999, 136));
+    catalogo.Add(new Serie(3, "Dark", "Mistério", 2017, 3, 10));
+    catalogo.Add(new Serie(4, "Breaking Bad", "Drama", 2008, 5, 13));
+    catalogo.Add(new Podcast(5, "Hipsters Ponto Tech", "Tecnologia", 2024, "Paulo Silveira", 200));
+    catalogo.Add(new Podcast(6, "Podpah", "Entretenimento", 2023, "Igão e Mítico", 450));
+}
+
+bool MostrarListaSimples()
+{
+    if (catalogo.Count == 0)
+    {
+        Console.WriteLine("Nenhum conteúdo cadastrado no momento.");
+        return false;
+    }
+
+    Console.WriteLine("--- Conteúdos Disponíveis ---");
+    foreach (Conteudo c in catalogo)
+    {
+        Console.WriteLine($"ID: {c.Id} | Título: {c.Titulo} | Tipo: {c.GetType().Name}");
+    }
+    Console.WriteLine("-----------------------------\n");
+    return true;
+}
+
+void ListarConteudos()
+{
+    Console.Clear();
+    Console.WriteLine("===== CATÁLOGO DE CONTEÚDOS =====");
+    MostrarListaSimples();
+    Console.WriteLine("\nPressione qualquer tecla para voltar...");
+    Console.ReadKey();
+}
+
+void CadastrarConteudo()
+{
+    Console.Clear();
+    Console.WriteLine("===== CADASTRAR NOVO CONTEÚDO =====");
+    Console.WriteLine("1 - Filme");
+    Console.WriteLine("2 - Série");
+    Console.WriteLine("3 - Podcast");
+    Console.Write("Escolha o tipo de conteúdo: ");
+    string tipo = Console.ReadLine() ?? "";
+
+    if (tipo != "1" && tipo != "2" && tipo != "3")
+    {
+        Console.WriteLine("Opção de conteúdo inválida!");
+        Console.WriteLine("Pressione qualquer tecla para voltar...");
+        Console.ReadKey();
+        return;
+    }
+
+    Console.WriteLine("\n--- Dados Gerais ---");
+
+    int id = 0;
+    while (true)
+    {
+        Console.Write("Digite o ID numérico: ");
+        if (int.TryParse(Console.ReadLine(), out id))
+        {
+            if (catalogo.Any(c => c.Id == id)) Console.WriteLine("Erro: Já existe um conteúdo com este ID.");
+            else break;
+        }
+        else Console.WriteLine("Erro: O ID deve ser um número inteiro válido.");
+    }
+
+    string titulo = "";
+    while (string.IsNullOrWhiteSpace(titulo))
+    {
+        Console.Write("Digite o título: ");
+        titulo = Console.ReadLine() ?? "";
+        if (string.IsNullOrWhiteSpace(titulo)) Console.WriteLine("Erro: O título não pode ficar em branco.");
+    }
+
+    string categoria = "";
+    while (string.IsNullOrWhiteSpace(categoria))
+    {
+        Console.Write("Digite a categoria: ");
+        categoria = Console.ReadLine() ?? "";
+        if (string.IsNullOrWhiteSpace(categoria)) Console.WriteLine("Erro: A categoria não pode ficar em branca.");
+    }
+
+    int ano = 0;
+    int anoAtual = DateTime.Now.Year;
+    while (true)
+    {
+        Console.Write("Digite o ano de lançamento: ");
+        if (int.TryParse(Console.ReadLine(), out ano) && ano >= 1888 && ano <= anoAtual) break;
+        Console.WriteLine($"Erro: Digite um ano válido (entre 1888 e {anoAtual}).");
+    }
+
+    Console.WriteLine("\n--- Dados Específicos ---");
+    Conteudo? novoConteudo = null;
+
+    if (tipo == "1")
+    {
+        int duracao = 0;
+        while (true)
+        {
+            Console.Write("Digite a duração (em minutos): ");
+            if (int.TryParse(Console.ReadLine(), out duracao) && duracao > 0) break;
+            Console.WriteLine("Erro: A duração deve ser um número positivo maior que zero.");
+        }
+        novoConteudo = new Filme(id, titulo, categoria, ano, duracao);
+    }
+    else if (tipo == "2")
+    {
+        int temporadas = 0;
+        while (true)
+        {
+            Console.Write("Digite a quantidade de temporadas: ");
+            if (int.TryParse(Console.ReadLine(), out temporadas) && temporadas > 0) break;
+            Console.WriteLine("Erro: A quantidade de temporadas deve ser no mínimo 1.");
+        }
+
+        int episodios = 0;
+        while (true)
+        {
+            Console.Write("Digite a quantidade de episódios por temporada: ");
+            if (int.TryParse(Console.ReadLine(), out episodios) && episodios > 0) break;
+            Console.WriteLine("Erro: A quantidade de episódios deve ser no mínimo 1.");
+        }
+        novoConteudo = new Serie(id, titulo, categoria, ano, temporadas, episodios);
+    }
+    else if (tipo == "3")
+    {
+        string apresentador = "";
+        while (string.IsNullOrWhiteSpace(apresentador))
+        {
+            Console.Write("Digite o nome do apresentador: ");
+            apresentador = Console.ReadLine() ?? "";
+            if (string.IsNullOrWhiteSpace(apresentador)) Console.WriteLine("Erro: O nome do apresentador não pode ficar em branco.");
+        }
+
+        int episodiosPod = 0;
+        while (true)
+        {
+            Console.Write("Digite a quantidade de episódios lançados: ");
+            if (int.TryParse(Console.ReadLine(), out episodiosPod) && episodiosPod > 0) break;
+            Console.WriteLine("Erro: A quantidade de episódios deve ser no mínimo 1.");
+        }
+        novoConteudo = new Podcast(id, titulo, categoria, ano, apresentador, episodiosPod);
+    }
+
+    if (novoConteudo != null)
+    {
+        catalogo.Add(novoConteudo);
+        Console.WriteLine("\nConteúdo cadastrado com sucesso!");
+    }
+
+    Console.WriteLine("\nPressione qualquer tecla para voltar...");
+    Console.ReadKey();
+}
+
+void BuscarPorTitulo()
+{
+    Console.Clear();
+    Console.WriteLine("===== BUSCAR CONTEÚDO =====");
+    
+    if (!MostrarListaSimples()) 
+    {
+        Console.WriteLine("\nPressione qualquer tecla para voltar...");
+        Console.ReadKey();
+        return; 
+    }
+
+    Console.Write("Digite o título que deseja buscar: ");
+    string termo = (Console.ReadLine() ?? "").ToLower();
+
+    var resultados = catalogo.Where(c => c.Titulo.ToLower().Contains(termo)).ToList();
+
+    if (resultados.Count == 0) Console.WriteLine("\nNenhum conteúdo encontrado com esse termo.");
+    else
+    {
+        Console.WriteLine("\n--- Resultados da Busca ---");
+        foreach (Conteudo c in resultados)
+        {
+            Console.WriteLine($"ID: {c.Id} | Título: {c.Titulo} | Tipo: {c.GetType().Name}");
+        }
+    }
+    Console.WriteLine("\nPressione qualquer tecla para voltar...");
+    Console.ReadKey();
+}
+
+void ExibirDetalhes()
+{
+    Console.Clear();
+    Console.WriteLine("===== EXIBIR DETALHES =====");
+    
+    if (!MostrarListaSimples()) 
+    {
+        Console.WriteLine("\nPressione qualquer tecla para voltar...");
+        Console.ReadKey();
+        return;
+    }
+
+    Console.Write("Digite o ID do conteúdo que deseja ver os detalhes: ");
+    
+    if(int.TryParse(Console.ReadLine(), out int idBusca))
+    {
+        Conteudo? encontrado = catalogo.FirstOrDefault(c => c.Id == idBusca);
+
+        if (encontrado != null)
+        {
+            Console.Clear();
+            encontrado.ExibirInformacoes(); 
+        }
+        else Console.WriteLine("Conteúdo não encontrado com esse ID.");
+    }
+    else Console.WriteLine("ID inválido. Digite um número.");
+    
+    Console.WriteLine("\nPressione qualquer tecla para voltar...");
+    Console.ReadKey();
+}
+
+void RemoverConteudo()
+{
+    Console.Clear();
+    Console.WriteLine("===== REMOVER CONTEÚDO =====");
+
+    if (!MostrarListaSimples()) 
+    {
+        Console.WriteLine("\nPressione qualquer tecla para voltar...");
+        Console.ReadKey();
+        return;
+    }
+
+    Console.Write("Digite o ID do conteúdo que deseja remover: ");
+    
+    if(int.TryParse(Console.ReadLine(), out int idRemover))
+    {
+        Conteudo? encontrado = catalogo.FirstOrDefault(c => c.Id == idRemover);
+
+        if (encontrado != null)
+        {
+            catalogo.Remove(encontrado);
+            Console.WriteLine($"\nConteúdo '{encontrado.Titulo}' removido com sucesso!");
+        }
+        else Console.WriteLine("\nConteúdo não encontrado.");
+    }
+    else Console.WriteLine("\nID inválido. Digite um número.");
+    
+    Console.WriteLine("\nPressione qualquer tecla para voltar...");
+    Console.ReadKey();
+}
