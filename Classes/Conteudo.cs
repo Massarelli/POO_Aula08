@@ -51,6 +51,8 @@ namespace POO_Aula08.Classes
             get { return _anoLancamento; }
             set { _anoLancamento = value; }
         }
+        // Implementação do status exigido pela interface para saber se o conteúdo está em reprodução ou não.
+        public bool EmReproducao { get; set; } = false;
 
         // Nova propriedade: Uma lista para guardar todas as notas recebidas
         public List<double> Avaliacoes { get; private set; } = new List<double>();

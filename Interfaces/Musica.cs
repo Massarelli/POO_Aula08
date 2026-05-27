@@ -7,6 +7,8 @@ public class Musica : IReproduzivel
     private string _artista;
     public string Titulo => _titulo; // Retorna o valor de _titulo
 
+    public bool EmReproducao { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    
     public Musica(string titulo, string artista)
     {
         _titulo = titulo;

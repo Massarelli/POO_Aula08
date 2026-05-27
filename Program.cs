@@ -28,7 +28,7 @@ namespace POO_Aula08
                 Console.WriteLine("5 - Remover conteúdo");
                 Console.WriteLine("6 - Avaliar um conteúdo"); // DESAFIOS EXTRA: Implementar sistema de avaliação (notas) para cada conteúdo
                 Console.WriteLine("7 - Ver Ranking (Top Avaliados)"); // DESAFIOS EXTRA: Criar um ranking dos conteúdos mais bem avaliados, mostrando título e média das avaliações
-                Console.WriteLine("8 - Testar Player de Mídia (Interface)"); // Player
+                Console.WriteLine("8 - Player de Mídia (Interface)"); // Player
                 Console.WriteLine("9 - Sair"); 
                 Console.WriteLine("===================================");
                 Console.Write("Escolha uma opção: ");
@@ -299,7 +299,7 @@ namespace POO_Aula08
                 return; 
             }
 
-            Console.Write("Digite o título que deseja buscar: ");
+            Console.Write("Digite o \x1b[1mtítulo\x1b[0m que deseja buscar: ");
             string termo = (Console.ReadLine() ?? "").ToLower();
 
             var resultados = catalogo.Where(c => c.Titulo.ToLower().Contains(termo)).ToList();
@@ -332,7 +332,7 @@ namespace POO_Aula08
                 return;
             }
 
-            Console.Write("Digite o ID do conteúdo que deseja ver os detalhes: ");
+            Console.Write("Digite o \x1b[1mID\x1b[0m do conteúdo que deseja ver os detalhes: ");
             
             if(int.TryParse(Console.ReadLine(), out int idBusca))
             {
@@ -369,7 +369,7 @@ namespace POO_Aula08
                 return;
             }
 
-            Console.Write("Digite o ID do conteúdo que deseja remover: ");
+            Console.Write("Digite o \x1b[1mID\x1b[0m do conteúdo que deseja remover: ");
             
             if(int.TryParse(Console.ReadLine(), out int idRemover))
             {
@@ -405,7 +405,7 @@ namespace POO_Aula08
                 return;
             }
 
-            Console.Write("Digite o ID do conteúdo que deseja avaliar: ");
+            Console.Write("Digite o \x1b[1mID\x1b[0m do conteúdo que deseja avaliar: ");
             
             if(int.TryParse(Console.ReadLine(), out int idAvaliar))
             {
@@ -472,7 +472,6 @@ namespace POO_Aula08
 
         static void TestarPlayerMidia()
         {
-            // Validação: Se o catálogo estiver vazio, não há o que reproduzir
             if (catalogo.Count == 0)
             {
                 Console.Clear();
@@ -489,18 +488,23 @@ namespace POO_Aula08
             {
                 Console.Clear();
                 Console.WriteLine("===== PLAYER DE MÍDIA INTERATIVO =====");
-                Console.WriteLine("Conteúdos REAIS do seu catálogo prontos para reprodução:\n");
+                Console.WriteLine("Catálogo para reprodução:\n");
 
-                // Lista os conteúdos REAIS do sistema
+                // 1. AQUI DESENHAMOS A LISTA COM O STATUS!
                 for (int i = 0; i < catalogo.Count; i++)
                 {
                     string tipo = catalogo[i].GetType().Name;
-                    Console.WriteLine($"{i + 1} - [{tipo}] {catalogo[i].Titulo}");
+                    
+                    // Verifica se está a rodar ou pausado e define o texto
+                    string statusVisual = catalogo[i].EmReproducao ? "▶️  EM REPRODUÇÃO" : "⏸️  Pausado";
+                    
+                    // Imprime a linha completa
+                    Console.WriteLine($"{i + 1} - ({statusVisual}) [{tipo}] {catalogo[i].Titulo}");
                 }
 
                 Console.WriteLine("0 - Voltar ao Menu Principal");
                 Console.WriteLine("======================================");
-                Console.Write("Escolha uma mídia para dar Play: ");
+                Console.Write("Escolha uma mídia para controlar: ");
 
                 if (int.TryParse(Console.ReadLine(), out int escolha) && escolha >= 0 && escolha <= catalogo.Count)
                 {
@@ -510,8 +514,6 @@ namespace POO_Aula08
                         continue;
                     }
 
-                    // Pega o conteúdo real selecionado. 
-                    // Como Conteudo implementa IReproduzivel, o polimorfismo funciona perfeitamente!
                     IReproduzivel midiaSelecionada = catalogo[escolha - 1];
 
                     Console.WriteLine($"\nVocê selecionou: {midiaSelecionada.Titulo}");
@@ -522,9 +524,33 @@ namespace POO_Aula08
                     string acao = Console.ReadLine() ?? "";
                     Console.WriteLine();
 
-                    if (acao == "1") midiaSelecionada.Play();
-                    else if (acao == "2") midiaSelecionada.Pause();
-                    else Console.WriteLine("Ação inválida.");
+                    // 2. AQUI ATUALIZAMOS O STATUS AO CLICAR PLAY/PAUSE
+                    if (acao == "1") 
+                    {
+                        // Se for dar Play, primeiro pausamos qualquer outro que estivesse a rodar
+                        foreach (var conteudo in catalogo)
+                        {
+                            if (conteudo.EmReproducao && conteudo != midiaSelecionada)
+                            {
+                                conteudo.Pause();
+                                conteudo.EmReproducao = false;
+                            }
+                        }
+
+                        // Dá play no que o usuário escolheu e muda o status para true
+                        midiaSelecionada.Play();
+                        midiaSelecionada.EmReproducao = true; 
+                    }
+                    else if (acao == "2") 
+                    {
+                        // Dá pause e muda o status para false
+                        midiaSelecionada.Pause();
+                        midiaSelecionada.EmReproducao = false; 
+                    }
+                    else 
+                    {
+                        Console.WriteLine("Ação inválida.");
+                    }
 
                     Console.WriteLine("\nPressione qualquer tecla para continuar no Player...");
                     Console.ReadKey();

@@ -5,6 +5,9 @@ public class Video : IReproduzivel
     private string _titulo;
     private string _resolucao;
     public string Titulo => _titulo; // Retorna o valor de _titulo
+
+    public bool EmReproducao { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
     public Video(string titulo, string resolucao)
     {
         _titulo = titulo;
