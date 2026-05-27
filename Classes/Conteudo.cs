@@ -6,45 +6,45 @@ namespace POO_Aula08.Classes
     {
         // [ENCAPSULAMENTO]: Atributos marcados como 'private'. 
         // Eles estão escondidos do mundo externo e só podem ser alterados diretamente por esta própria classe.
-        private int id;
-        private string titulo;
-        private string categoria;
-        private int anoLancamento;
+        private int _id;
+        private string _titulo;
+        private string _categoria;
+        private int _anoLancamento;
 
         // [CONSTRUTOR]: Método especial executado no momento da criação do objeto.
         // Como a classe é abstrata, este construtor será chamado pelas classes filhas (Filme, Serie, etc.) através do 'base'.
         public Conteudo(int id, string titulo, string categoria, int anoLancamento)
         {
-            this.id = id;
-            this.titulo = titulo;
-            this.categoria = categoria;
-            this.anoLancamento = anoLancamento;
+            _id = id;
+            _titulo = titulo;
+            _categoria = categoria;
+            _anoLancamento = anoLancamento;
         }
 
         // [ENCAPSULAMENTO]: Métodos Getters e Setters (no C# usamos Propriedades).
         // Eles atuam como "porteiros", permitindo ler (get) ou gravar (set) os atributos privados de forma segura.
         public int Id
         {
-            get { return id; }
-            set { id = value; }
+            get { return _id; }
+            set { _id = value; }
         }
 
         public string Titulo
         {
-            get { return titulo; }
-            set { titulo = value; } // Mais para frente, podemos colocar as validações de "título vazio" aqui!
+            get { return _titulo; }
+            set { _titulo = value; } // Mais para frente, podemos colocar as validações de "título vazio" aqui!
         }
 
         public string Categoria
         {
-            get { return categoria; }
-            set { categoria = value; }
+            get { return _categoria; }
+            set { _categoria = value; }
         }
 
         public int AnoLancamento
         {
-            get { return anoLancamento; }
-            set { anoLancamento = value; }
+            get { return _anoLancamento; }
+            set { _anoLancamento = value; }
         }
 
         

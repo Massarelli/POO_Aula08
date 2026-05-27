@@ -5,21 +5,21 @@ namespace POO_Aula08.Classes
     public class Filme : Conteudo
     {
         // [ENCAPSULAMENTO]: Atributo privado que é específico e exclusivo da classe Filme.
-        private int duracaoMinutos;
+        private int _duracaoMinutos;
 
         // [CONSTRUTOR]: Ao criar um Filme, precisamos passar todas as informações.
         // A palavra-chave 'base' pega os 4 primeiros parâmetros e repassa para o construtor da classe pai (Conteudo) resolver.
         public Filme(int id, string titulo, string categoria, int anoLancamento, int duracaoMinutos) 
             : base(id, titulo, categoria, anoLancamento)
         {
-            this.duracaoMinutos = duracaoMinutos;
+            _duracaoMinutos = duracaoMinutos;
         }
 
         // [ENCAPSULAMENTO]: Propriedade para ler e gravar a duração de forma segura.
         public int DuracaoMinutos
         {
-            get { return duracaoMinutos; }
-            set { duracaoMinutos = value; } 
+            get { return _duracaoMinutos; }
+            set { _duracaoMinutos = value; } 
         }
 
         // [POLIMORFISMO]: A palavra-chave 'override' indica que estamos sobrescrevendo o método abstrato 

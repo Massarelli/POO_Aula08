@@ -4,29 +4,29 @@ namespace POO_Aula08.Classes
     public class Serie : Conteudo
     {
         // [ENCAPSULAMENTO]: Atributos privados específicos de uma série.
-        private int quantidadeTemporadas;
-        private int episodiosPorTemporada;
+        private int _quantidadeTemporadas;
+        private int _episodiosPorTemporada;
 
         // [CONSTRUTOR]: Recebemos todos os dados necessários para criar uma série.
         // Novamente, usamos o 'base' para delegar as informações comuns para a classe pai (Conteudo).
         public Serie(int id, string titulo, string categoria, int anoLancamento, int quantidadeTemporadas, int episodiosPorTemporada) 
             : base(id, titulo, categoria, anoLancamento)
         {
-            this.quantidadeTemporadas = quantidadeTemporadas;
-            this.episodiosPorTemporada = episodiosPorTemporada;
+            _quantidadeTemporadas = quantidadeTemporadas;
+            _episodiosPorTemporada = episodiosPorTemporada;
         }
 
         // [ENCAPSULAMENTO]: Propriedades (Getters e Setters) para os atributos específicos da série.
         public int QuantidadeTemporadas
         {
-            get { return quantidadeTemporadas; }
-            set { quantidadeTemporadas = value; }
+            get { return _quantidadeTemporadas; }
+            set { _quantidadeTemporadas = value; }
         }
 
         public int EpisodiosPorTemporada
         {
-            get { return episodiosPorTemporada; }
-            set { episodiosPorTemporada = value; }
+            get { return _episodiosPorTemporada; }
+            set { _episodiosPorTemporada = value; }
         }
 
         // [POLIMORFISMO]: Sobrescrita do método abstrato. 
