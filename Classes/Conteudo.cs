@@ -1,8 +1,11 @@
+using POO_Aula08.Interfaces; // 👈 PONTO 1: Adicionado para o arquivo reconhecer a interface
+
 namespace POO_Aula08.Classes
 {
     // [ABSTRAÇÃO]: A palavra-chave 'abstract' define que esta classe serve apenas como um "molde" ou "contrato".
     // Ela NUNCA poderá ser instanciada diretamente (ex: new Conteudo() resultará em erro).
-    public abstract class Conteudo
+    // 👈 PONTO 2: Adicionado ": IReproduzivel" para dizer que todo Conteúdo agora é reproduzível!
+    public abstract class Conteudo : IReproduzivel
     {
         // [ENCAPSULAMENTO]: Atributos marcados como 'private'. 
         // Eles estão escondidos do mundo externo e só podem ser alterados diretamente por esta própria classe.
@@ -29,10 +32,12 @@ namespace POO_Aula08.Classes
             set { _id = value; }
         }
 
+        // Nota: O C# aceita perfeitamente essa sua propriedade para cumprir o contrato da interface,
+        // pois ela possui o 'get' que a interface exige!
         public string Titulo
         {
             get { return _titulo; }
-            set { _titulo = value; } // Mais para frente, podemos colocar as validações de "título vazio" aqui!
+            set { _titulo = value; } 
         }
 
         public string Categoria
@@ -47,8 +52,7 @@ namespace POO_Aula08.Classes
             set { _anoLancamento = value; }
         }
 
-        
-// Nova propriedade: Uma lista para guardar todas as notas recebidas
+        // Nova propriedade: Uma lista para guardar todas as notas recebidas
         public List<double> Avaliacoes { get; private set; } = new List<double>();
 
         // Propriedade calculada: Retorna a média de todas as notas usando LINQ
@@ -71,5 +75,10 @@ namespace POO_Aula08.Classes
         // [POLIMORFISMO / ABSTRAÇÃO]: Método abstrato (sem corpo).
         // Isso obriga que toda classe que herdar de 'Conteudo' implemente obrigatoriamente a sua própria versão deste método.
         public abstract void ExibirInformacoes();
+
+        // 👈 PONTO 3: Métodos abstratos vindos da interface IReproduzivel.
+        // Como 'Conteudo' é uma classe abstrata, nós repassamos essa obrigação para os filhos (Filme, Serie, Podcast).
+        public abstract void Play();
+        public abstract void Pause();
     }
 }

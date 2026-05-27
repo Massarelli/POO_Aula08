@@ -5,6 +5,7 @@ public class Musica : IReproduzivel
     // Usando o seu novo padrão Microsoft de nomenclatura!
     private string _titulo;
     private string _artista;
+    public string Titulo => _titulo; // Retorna o valor de _titulo
 
     public Musica(string titulo, string artista)
     {

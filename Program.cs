@@ -472,33 +472,69 @@ namespace POO_Aula08
 
         static void TestarPlayerMidia()
         {
-            Console.Clear();
-            Console.WriteLine("===== PLAYER DE MÍDIA SIMULADO =====");
-            Console.WriteLine("Criando uma fila de reprodução híbrida (Músicas e Vídeos)...\n");
-
-            // [POLIMORFISMO POR INTERFACE]: A lista é do tipo da INTERFACE.
-            // Ela não quer saber se é Música ou Vídeo, contanto que ambos saibam dar Play/Pause.
-            List<IReproduzivel> filaReproducao = new List<IReproduzivel>();
-
-            // Adicionando objetos completamente diferentes na mesma lista
-            filaReproducao.Add(new Musica("Bohemian Rhapsody", "Queen"));
-            filaReproducao.Add(new Video("Tutorial de C# Avançado", "1080p"));
-            filaReproducao.Add(new Musica("As It Was", "Harry Styles"));
-            filaReproducao.Add(new Video("Trailer do Filme Interestelar", "4K"));
-
-            // Percorrendo a fila e controlando o uso
-            foreach (IReproduzivel midia in filaReproducao)
+            // Validação: Se o catálogo estiver vazio, não há o que reproduzir
+            if (catalogo.Count == 0)
             {
-                // Note que o compilador só nos deixa acessar .Play() e .Pause() 
-                // porque é o que está garantido no contrato da interface.
-                midia.Play();
-                midia.Pause();
-                Console.WriteLine("-----------------------------------");
+                Console.Clear();
+                Console.WriteLine("===== PLAYER DE MÍDIA INTERATIVO =====");
+                Console.WriteLine("\nNão há conteúdos cadastrados no catálogo para reproduzir.");
+                Console.WriteLine("Pressione qualquer tecla para voltar...");
+                Console.ReadKey();
+                return;
             }
 
-            Console.WriteLine("\nFila de reprodução finalizada.");
-            Console.WriteLine("Pressione qualquer tecla para voltar...");
-            Console.ReadKey();
+            bool controlandoPlayer = true;
+
+            while (controlandoPlayer)
+            {
+                Console.Clear();
+                Console.WriteLine("===== PLAYER DE MÍDIA INTERATIVO =====");
+                Console.WriteLine("Conteúdos REAIS do seu catálogo prontos para reprodução:\n");
+
+                // Lista os conteúdos REAIS do sistema
+                for (int i = 0; i < catalogo.Count; i++)
+                {
+                    string tipo = catalogo[i].GetType().Name;
+                    Console.WriteLine($"{i + 1} - [{tipo}] {catalogo[i].Titulo}");
+                }
+
+                Console.WriteLine("0 - Voltar ao Menu Principal");
+                Console.WriteLine("======================================");
+                Console.Write("Escolha uma mídia para dar Play: ");
+
+                if (int.TryParse(Console.ReadLine(), out int escolha) && escolha >= 0 && escolha <= catalogo.Count)
+                {
+                    if (escolha == 0)
+                    {
+                        controlandoPlayer = false;
+                        continue;
+                    }
+
+                    // Pega o conteúdo real selecionado. 
+                    // Como Conteudo implementa IReproduzivel, o polimorfismo funciona perfeitamente!
+                    IReproduzivel midiaSelecionada = catalogo[escolha - 1];
+
+                    Console.WriteLine($"\nVocê selecionou: {midiaSelecionada.Titulo}");
+                    Console.WriteLine("1 - ▶️  Play");
+                    Console.WriteLine("2 - ⏸️  Pause");
+                    Console.Write("Escolha a ação: ");
+
+                    string acao = Console.ReadLine() ?? "";
+                    Console.WriteLine();
+
+                    if (acao == "1") midiaSelecionada.Play();
+                    else if (acao == "2") midiaSelecionada.Pause();
+                    else Console.WriteLine("Ação inválida.");
+
+                    Console.WriteLine("\nPressione qualquer tecla para continuar no Player...");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    Console.WriteLine("\nOpção inválida! Tente novamente.");
+                    Console.ReadKey();
+                }
+            }
         }
 
     }

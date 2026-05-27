@@ -48,5 +48,8 @@ namespace POO_Aula08.Classes
             Console.WriteLine("Podcast disponível em áudio.");
             Console.WriteLine("");
         }
+
+        public override void Play() => Console.WriteLine($"▶️ Dando play no Podcast: '{Titulo}'. Pronto para ouvir!");
+        public override void Pause() => Console.WriteLine($"⏸️ Podcast '{Titulo}' pausado.");
     }
 }

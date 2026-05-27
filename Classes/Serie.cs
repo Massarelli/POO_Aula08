@@ -50,5 +50,8 @@ namespace POO_Aula08.Classes
             Console.WriteLine("Série com múltiplas temporadas.");
             Console.WriteLine("");
         }
+
+        public override void Play() => Console.WriteLine($"▶️ Dando play na Série: '{Titulo}'. Prepare-se para assistir!");
+        public override void Pause() => Console.WriteLine($"⏸️ Série '{Titulo}' pausada.");
     }
 }

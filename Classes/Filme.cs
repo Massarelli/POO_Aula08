@@ -39,5 +39,8 @@ namespace POO_Aula08.Classes
             Console.WriteLine("Filme disponível para assistir.");
             Console.WriteLine("");
         }
+
+        public override void Play() => Console.WriteLine($"▶️ Dando play no Filme: '{Titulo}'. Pipoca pronta!");
+        public override void Pause() => Console.WriteLine($"⏸️ Filme '{Titulo}' pausado.");
     }
 }
