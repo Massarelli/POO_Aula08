@@ -1,10 +1,10 @@
-using POO_Aula08.Interfaces; // 👈 PONTO 1: Adicionado para o arquivo reconhecer a interface
+using POO_Aula08.Interfaces; // PONTO 1: Adicionado para o arquivo reconhecer a interface
 
 namespace POO_Aula08.Classes
 {
     // [ABSTRAÇÃO]: A palavra-chave 'abstract' define que esta classe serve apenas como um "molde" ou "contrato".
     // Ela NUNCA poderá ser instanciada diretamente (ex: new Conteudo() resultará em erro).
-    // 👈 PONTO 2: Adicionado ": IReproduzivel" para dizer que todo Conteúdo agora é reproduzível!
+    // PONTO 2: Adicionado ": IReproduzivel" para dizer que todo Conteúdo agora é reproduzível!
     public abstract class Conteudo : IReproduzivel
     {
         // [ENCAPSULAMENTO]: Atributos marcados como 'private'. 
@@ -78,7 +78,7 @@ namespace POO_Aula08.Classes
         // Isso obriga que toda classe que herdar de 'Conteudo' implemente obrigatoriamente a sua própria versão deste método.
         public abstract void ExibirInformacoes();
 
-        // 👈 PONTO 3: Métodos abstratos vindos da interface IReproduzivel.
+        // PONTO 3: Métodos abstratos vindos da interface IReproduzivel.
         // Como 'Conteudo' é uma classe abstrata, nós repassamos essa obrigação para os filhos (Filme, Serie, Podcast).
         public abstract void Play();
         public abstract void Pause();
