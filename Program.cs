@@ -1,4 +1,5 @@
 ﻿using POO_Aula08.Classes; // Importa as classes que criamos na pasta
+using POO_Aula08.Interfaces; // Para enxergar a interface IReproduzivel
 
 namespace POO_Aula08
 {
@@ -27,7 +28,8 @@ namespace POO_Aula08
                 Console.WriteLine("5 - Remover conteúdo");
                 Console.WriteLine("6 - Avaliar um conteúdo"); // DESAFIOS EXTRA: Implementar sistema de avaliação (notas) para cada conteúdo
                 Console.WriteLine("7 - Ver Ranking (Top Avaliados)"); // DESAFIOS EXTRA: Criar um ranking dos conteúdos mais bem avaliados, mostrando título e média das avaliações
-                Console.WriteLine("8 - Sair");
+                Console.WriteLine("8 - Testar Player de Mídia (Interface)"); // Player
+                Console.WriteLine("9 - Sair"); 
                 Console.WriteLine("===================================");
                 Console.Write("Escolha uma opção: ");
                 
@@ -57,6 +59,9 @@ namespace POO_Aula08
                         ExibirRanking();
                         break;
                     case "8":
+                        TestarPlayerMidia();
+                        break;
+                    case "9":
                         executando = false;
                         Console.WriteLine("Saindo do sistema...");
                         break;
@@ -462,6 +467,37 @@ namespace POO_Aula08
             }
 
             Console.WriteLine("\nPressione qualquer tecla para voltar...");
+            Console.ReadKey();
+        }
+
+        static void TestarPlayerMidia()
+        {
+            Console.Clear();
+            Console.WriteLine("===== PLAYER DE MÍDIA SIMULADO =====");
+            Console.WriteLine("Criando uma fila de reprodução híbrida (Músicas e Vídeos)...\n");
+
+            // [POLIMORFISMO POR INTERFACE]: A lista é do tipo da INTERFACE.
+            // Ela não quer saber se é Música ou Vídeo, contanto que ambos saibam dar Play/Pause.
+            List<IReproduzivel> filaReproducao = new List<IReproduzivel>();
+
+            // Adicionando objetos completamente diferentes na mesma lista
+            filaReproducao.Add(new Musica("Bohemian Rhapsody", "Queen"));
+            filaReproducao.Add(new Video("Tutorial de C# Avançado", "1080p"));
+            filaReproducao.Add(new Musica("As It Was", "Harry Styles"));
+            filaReproducao.Add(new Video("Trailer do Filme Interestelar", "4K"));
+
+            // Percorrendo a fila e controlando o uso
+            foreach (IReproduzivel midia in filaReproducao)
+            {
+                // Note que o compilador só nos deixa acessar .Play() e .Pause() 
+                // porque é o que está garantido no contrato da interface.
+                midia.Play();
+                midia.Pause();
+                Console.WriteLine("-----------------------------------");
+            }
+
+            Console.WriteLine("\nFila de reprodução finalizada.");
+            Console.WriteLine("Pressione qualquer tecla para voltar...");
             Console.ReadKey();
         }
 
